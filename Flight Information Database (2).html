@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flight Information Database</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #EAF4FF;
+}
+
+/* TOP FRAME */
+
+.header {
+    height: 90px;
+    background-color: #0F2A44;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+
+/* LEFT FRAME */
+
+.sidebar {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 90px);
+    background-color: #163A5F;
+    padding-top: 25px;
+}
+
+.sidebar h2 {
+    color: white;
+    text-align: center;
+}
+
+.sidebar button {
+    display: block;
+    width: 85%;
+    margin: 12px auto;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #245A87;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background-color: #3B82C4;
+}
+
+
+/* MAIN FRAME */
+
+.main {
+    margin-left: 220px;
+    padding: 35px;
+
+    background-color: #EAF4FF;
+
+    min-height: calc(100vh - 90px);
+}
+
+/* HOME CARD */
+
+.card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px #B8C9D9;
+}
+
+.card h2 {
+    color: #0F4C81;
+}
+
+
+/* SEARCH */
+
+.search-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px #B8C9D9;
+    max-width: 700px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 7px;
+    border: 1px solid #B8C9D9;
+    border-radius: 7px;
+}
+
+.search-btn {
+    background-color: #1769AA;
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.search-btn:hover {
+    background-color: #0F4C81;
+}
+
+
+/* RESULT */
+
+#result {
+    margin-top: 25px;
+}
+
+.flight-card {
+    background-color: #F8FCFF;
+    padding: 22px;
+    border-radius: 12px;
+    border-left: 6px solid #1769AA;
+    box-shadow: 0 3px 10px #C5D5E2;
+    line-height: 1.8;
+}
+
+
+/* TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 3px 10px #C5D5E2;
+}
+
+th {
+    background-color: #0F2A44;
+    color: white;
+    padding: 14px;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #D6E2EC;
+}
+
+
+/* MOBILE VIEW */
+
+@media (max-width: 700px) {
+
+    .header {
+        height: auto;
+        padding: 18px 20px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 14px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .sidebar button {
+        width: auto;
+        flex: 1 1 auto;
+        margin: 0;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 18px;
+        min-height: auto;
+    }
+
+    .card,
+    .search-box {
+        padding: 18px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- TOP FRAME -->
+
+<div class="header">
+
+<h1> Flight Information Database</h1>
+
+</div>
+
+
+
+<!-- LEFT FRAME -->
+
+<div class="sidebar">
+
+<h2>MENU</h2>
+
+<button onclick="showHome()"> Home</button>
+
+<button onclick="showFlights()"> Flight Details</button>
+
+<button onclick="showSearch()"> Search Flight</button>
+
+<button onclick="showAbout()"> About</button>
+
+</div>
+
+
+
+<!-- MAIN FRAME -->
+
+<div class="main" id="mainContent">
+
+<div class="card">
+
+<h2>Welcome to Flight Information Database</h2>
+
+<p>
+Welcome to our Flight Information Database.
+</p>
+
+<p>
+This website allows users to search and view
+flight information using departure city,
+destination city and travel date.
+</p>
+
+<br>
+
+<p>
+ Domestic Flights &nbsp;&nbsp;
+ International Flights &nbsp;&nbsp;
+ Easy Flight Search
+</p>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+/* HOME */
+
+function showHome() {
+
+document.getElementById("mainContent").innerHTML = `
+
+<div class="card">
+
+<h2>Welcome to Flight Information Database</h2>
+
+<p>
+This website provides organized flight information
+for domestic and international routes.
+</p>
+
+<p>
+Users can search flights using From, To and Date.
+</p>
+
+<br>
+
+<h3> Available Services</h3>
+
+<p>• Domestic Flight Information</p>
+
+<p>• International Flight Information</p>
+
+<p>• Flight Search</p>
+
+<p>• Flight Status</p>
+
+</div>
+
+`;
+
+}
+
+
+
+/* FLIGHT DETAILS */
+
+function showFlights() {
+
+document.getElementById("mainContent").innerHTML = `
+
+<div class="card">
+
+<h2> Flight Details</h2>
+
+<table>
+
+<tr>
+
+<th>Flight</th>
+<th>Airline</th>
+<th>From</th>
+<th>To</th>
+<th>Status</th>
+
+</tr>
+
+
+<tr>
+
+<td>AI101</td>
+<td>Air India</td>
+<td>Chennai</td>
+<td>Delhi</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>6E202</td>
+<td>IndiGo</td>
+<td>Mumbai</td>
+<td>Bangalore</td>
+<td>Delayed</td>
+
+</tr>
+
+
+<tr>
+
+<td>SG404</td>
+<td>SpiceJet</td>
+<td>Hyderabad</td>
+<td>Chennai</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>KE601</td>
+<td>Korean Air</td>
+<td>Chennai</td>
+<td>Seoul</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>AZ701</td>
+<td>ITA Airways</td>
+<td>Chennai</td>
+<td>Rome</td>
+<td>Delayed</td>
+
+</tr>
+
+
+<tr>
+
+<td>KL701</td>
+<td>KLM</td>
+<td>Chennai</td>
+<td>Amsterdam</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>BA142</td>
+<td>British Airways</td>
+<td>Chennai</td>
+<td>London</td>
+<td>Delayed</td>
+
+</tr>
+
+
+<tr>
+
+<td>AC851</td>
+<td>Air Canada</td>
+<td>Chennai</td>
+<td>Toronto</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>JL038</td>
+<td>Japan Airlines</td>
+<td>Chennai</td>
+<td>Tokyo</td>
+<td>On Time</td>
+
+</tr>
+
+
+<tr>
+
+<td>CA828</td>
+<td>Air China</td>
+<td>Chennai</td>
+<td>Beijing</td>
+<td>Delayed</td>
+
+</tr>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+
+
+/* SEARCH */
+
+function showSearch() {
+
+document.getElementById("mainContent").innerHTML = `
+
+<div class="search-box">
+
+<h2> Search Flight</h2>
+
+<label>From:</label>
+
+<input type="text"
+id="fromCity"
+placeholder="Enter departure city">
+
+<br><br>
+
+
+<label>To:</label>
+
+<input type="text"
+id="toCity"
+placeholder="Enter destination city">
+
+<br><br>
+
+
+<label>Date:</label>
+
+<input type="date"
+id="flightDate">
+
+<br>
+
+
+<button class="search-btn"
+onclick="searchFlight()">
+
+Search Flight
+
+</button>
+
+
+<div id="result"></div>
+
+</div>
+
+`;
+
+}
+
+
+
+/* SEARCH FUNCTION */
+
+function searchFlight() {
+
+let from =
+document.getElementById("fromCity")
+.value.toLowerCase().trim();
+
+
+let to =
+document.getElementById("toCity")
+.value.toLowerCase().trim();
+
+
+let date =
+document.getElementById("flightDate").value;
+
+
+let result =
+document.getElementById("result");
+
+
+
+if (from == "" || to == "" || date == "") {
+
+result.innerHTML =
+"<div class='flight-card'> Please enter From, To and Date.</div>";
+
+return;
+
+}
+
+
+let flight = "";
+
+
+
+if (from == "chennai" && to == "delhi") {
+
+flight =
+" <b>AI101 - Air India</b><br>" +
+"Chennai → Delhi<br>" +
+" Date: " + date + "<br>" +
+" Departure: 08:00 AM<br>" +
+" Arrival: 10:45 AM<br>" +
+" Duration: 2h 45m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "mumbai" && to == "bangalore") {
+
+flight =
+" <b>6E202 - IndiGo</b><br>" +
+"Mumbai → Bangalore<br>" +
+" Date: " + date + "<br>" +
+" Departure: 11:30 AM<br>" +
+" Arrival: 01:15 PM<br>" +
+" Duration: 1h 45m<br>" +
+" Status: Delayed";
+
+}
+
+
+else if (from == "hyderabad" && to == "chennai") {
+
+flight =
+" <b>SG404 - SpiceJet</b><br>" +
+"Hyderabad → Chennai<br>" +
+" Date: " + date + "<br>" +
+" Departure: 06:30 PM<br>" +
+" Arrival: 07:45 PM<br>" +
+" Duration: 1h 15m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "chennai" && to == "seoul") {
+
+flight =
+" <b>KE601 - Korean Air</b><br>" +
+"Chennai → Seoul<br>" +
+" Date: " + date + "<br>" +
+" Departure: 09:00 AM<br>" +
+" Arrival: 06:30 PM<br>" +
+" Duration: 7h 00m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "chennai" && to == "rome") {
+
+flight =
+" <b>AZ701 - ITA Airways</b><br>" +
+"Chennai → Rome<br>" +
+" Date: " + date + "<br>" +
+" Departure: 10:30 AM<br>" +
+" Arrival: 08:00 PM<br>" +
+" Duration: 12h 00m<br>" +
+" Status: Delayed";
+
+}
+
+
+else if (from == "chennai" && to == "amsterdam") {
+
+flight =
+" <b>KL701 - KLM</b><br>" +
+"Chennai → Amsterdam<br>" +
+" Date: " + date + "<br>" +
+" Departure: 11:00 AM<br>" +
+" Arrival: 07:30 PM<br>" +
+" Duration: 11h 00m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "chennai" && to == "london") {
+
+flight =
+" <b>BA142 - British Airways</b><br>" +
+"Chennai → London<br>" +
+" Date: " + date + "<br>" +
+" Departure: 09:00 AM<br>" +
+" Arrival: 03:30 PM<br>" +
+" Duration: 10h 00m<br>" +
+" Status: Delayed";
+
+}
+
+
+else if (from == "chennai" && to == "toronto") {
+
+flight =
+" <b>AC851 - Air Canada</b><br>" +
+"Chennai → Toronto<br>" +
+" Date: " + date + "<br>" +
+" Departure: 08:00 PM<br>" +
+" Arrival: 06:00 AM<br>" +
+" Duration: 18h 30m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "chennai" && to == "tokyo") {
+
+flight =
+" <b>JL038 - Japan Airlines</b><br>" +
+"Chennai → Tokyo<br>" +
+" Date: " + date + "<br>" +
+" Departure: 10:00 AM<br>" +
+" Arrival: 09:00 PM<br>" +
+" Duration: 8h 30m<br>" +
+" Status: On Time";
+
+}
+
+
+else if (from == "chennai" && to == "beijing") {
+
+flight =
+" <b>CA828 - Air China</b><br>" +
+"Chennai → Beijing<br>" +
+" Date: " + date + "<br>" +
+" Departure: 11:30 AM<br>" +
+" Arrival: 09:00 PM<br>" +
+" Duration: 8h 00m<br>" +
+" Status: Delayed";
+
+}
+
+
+else {
+
+flight = " No flight found for this route.";
+
+}
+
+
+
+result.innerHTML =
+"<div class='flight-card'>" + flight + "</div>";
+
+}
+
+
+
+/* ABOUT */
+
+function showAbout() {
+
+document.getElementById("mainContent").innerHTML = `
+
+<div class="card">
+
+<h2> About Project</h2>
+
+<p>
+Flight Information Database is a beginner-friendly
+web project developed using HTML, CSS and JavaScript.
+</p>
+
+<p>
+The main purpose of this project is to provide
+organized flight information and a simple flight
+search interface.
+</p>
+
+<h3>Technologies Used</h3>
+
+<p>HTML • CSS • JavaScript</p>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+
+</body>
+
+</html>
